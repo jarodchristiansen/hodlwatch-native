@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import React, { useEffect } from "react";
 import {
   Button,
   StyleSheet,
@@ -10,8 +11,28 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import LandingNewsFeed from "../components/news/LandingNewsFeed";
+import { gql, useLazyQuery } from "@apollo/client";
 
 export default function HomeScreen({ navigation }: any) {
+  const CHAPTERS_QUERY = gql`
+    query Chapters {
+      chapters {
+        id
+        number
+        title
+      }
+    }
+  `;
+
+  const [fetchChapters, { data, loading, error }] =
+    useLazyQuery(CHAPTERS_QUERY);
+
+  useEffect(() => {
+    fetchChapters();
+  }, []);
+
+  console.log({ data, loading });
+
   return (
     <Container>
       <ExplainContain>
@@ -56,7 +77,14 @@ export default function HomeScreen({ navigation }: any) {
             Data Directly From The Blockchain
           </Text>
 
-          <Text style={{ fontSize: 20, padding: 10, color: "white", textAlign: 'center' }}>
+          <Text
+            style={{
+              fontSize: 20,
+              padding: 10,
+              color: "white",
+              textAlign: "center",
+            }}
+          >
             We believe in letting the data speak for itself
           </Text>
 
