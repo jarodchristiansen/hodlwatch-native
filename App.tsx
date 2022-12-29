@@ -6,21 +6,34 @@ import HomeScreen from "./src/screens/HomeScreen";
 import ProfileScreen from "./src/screens/ProfileScreen";
 import AuthScreen from "./src/screens/AuthScreen";
 
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+// import { persistCache } from 'apollo3-cache-persist'
+
 export default function App() {
   const Tab = createBottomTabNavigator();
 
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: "Home" }}
-        />
+  const cache = new InMemoryCache();
 
-        <Tab.Screen name="Auth" component={AuthScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+  const client = new ApolloClient({
+    uri: "https://api.graphql.guide/graphql",
+    cache,
+    defaultOptions: { watchQuery: { fetchPolicy: "cache-and-network" } },
+  });
+
+  return (
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ title: "Home" }}
+          />
+
+          <Tab.Screen name="Auth" component={AuthScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </ApolloProvider>
   );
 }
