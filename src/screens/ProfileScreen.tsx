@@ -13,7 +13,7 @@ export default function ProfileScreen() {
 
 const Container = styled.View`
   flex: 1;
-  background-color: green;
+  background-color: white;
   align-items: center;
   justify-content: center;
 `;
